@@ -1,0 +1,97 @@
+- name: install from source, libsafec
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://github.com/rurban/safeclib/releases/download/v02092020/libsafec-02092020.tar.gz'
+      checksum: 'sha256:fd8ae46814c8eeb401de1ac63423b213e34daa9c7a1bad64d1bf04c037cfc02f'
+
+- name: install from source, pcre-8.45.tar.gz
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+#      url: 'https://ftp.pcre.org/pub/pcre/pcre-8.45.tar.gz'
+      url: 'https://www.mirrorservice.org/sites/ftp.exim.org/pub/pcre/pcre-8.45.tar.gz'
+
+- name: install from source, gperftools-2.9.1.tar.gz
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://github.com/gperftools/gperftools/releases/download/gperftools-2.9.1/gperftools-2.9.1.tar.gz'
+
+- name: install from source, ragel-6.10.tar.gz
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'http://www.colm.net/files/ragel/ragel-6.10.tar.gz'
+
+- name: install from source, boost_1_76_0.tar.gz
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz'
+      download_only: yes
+
+- name: install from source, hyperscan-5.4.0
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://github.com/intel/hyperscan/archive/refs/tags/v5.4.0.tar.gz'
+      build_dir: "hyperscan-5.4.0-build"
+      prepare: "cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DBOOST_ROOT=~/snort_src/boost_1_76_0/ ../hyperscan-5.4.0"
+
+- name: install from source, flatbuffers-v2.0.0
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz'
+      file: 'flatbuffers-v2.0.0.tar.gz'
+      build_dir: "flatbuffers-build"
+      prepare: "cmake ../flatbuffers-2.0.0"
+
+- name: install from source, libdaq-3.0.4
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://github.com/snort3/libdaq/archive/refs/tags/v3.0.5.tar.gz'
+      file: 'libdaq-3.0.5.tar.gz'
+      prepare: "./bootstrap && ./configure"
+
+- name: update shared libraries
+  shell:
+    cmd: 'ldconfig'
+
+- name: install from source, snort3-3.1.6
+  include_role: 
+    name: ansible-instsrc
+  vars:
+    role_params:
+      user: 'ansible'
+      src_dir: '~/snort_src'
+      url: 'https://github.com/snort3/snort3/archive/refs/tags/3.1.16.0.tar.gz'
+      file: 'snort3-3.1.16.0.tar.gz'
+      prepare: "cd ~/snort_src/snort3-3.1.16.0 && ./configure_cmake.sh --prefix=/usr/local --enable-tcmalloc"
+      build_dir: "snort3-3.1.16.0/build"

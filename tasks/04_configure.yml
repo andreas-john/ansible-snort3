@@ -1,0 +1,30 @@
+- name: "create dirs"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/usr/local/etc/rules"
+    - "/usr/local/etc/so_rules"
+    - "/usr/local/etc/lists"
+    - "/var/log/snort"
+
+- name: place testrule
+  copy:
+   dest: '/usr/local/etc/rules/local.rules'
+   content: 'alert icmp any any -> any any ( msg:"ICMP Traffic Detected"; sid:10000001; metadata:policy security-ips alert; )'
+   force: no
+
+- name: enable builtin rules
+  lineinfile:
+    path: /usr/local/etc/snort/snort.lua
+    regexp: '    --enable_builtin_rules'
+    line: '    enable_builtin_rules = true,'
+    backrefs: yes
+
+- name: include rules
+  lineinfile:
+    path: /usr/local/etc/snort/snort.lua
+    regexp: '    --include = '
+    line: '    include = RULE_PATH .. "/local.rules",'
+    backrefs: yes
+    

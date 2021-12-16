@@ -1,0 +1,9 @@
+[Unit]
+Description=Ethtool Configration for Network Interface
+[Service]
+Requires=network.target
+Type=oneshot
+ExecStart=/sbin/ethtool -K {{ role_params.tapif }} gro off
+ExecStart=/sbin/ethtool -K {{ role_params.tapif }} lro off
+[Install]
+WantedBy=multi-user.target

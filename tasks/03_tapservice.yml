@@ -1,0 +1,14 @@
+- name: "copy offload property service for {{ role_parrams.tapif }}"
+  template:
+    src: snorttap.service.j2
+    dest: /lib/systemd/system/snorttap.service
+
+- name: enable snorttap.service
+  service:
+    name: snorttap
+    enabled: yes
+
+- name: start snorttap.service
+  service:
+    name: snorttap
+    state: started

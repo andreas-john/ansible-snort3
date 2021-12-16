@@ -1,0 +1,37 @@
+- name: Ensure group "snort" exists
+  group:
+    name: snort
+    state: present
+
+- name: create snort user
+  user:
+    name: snort
+    comment: SNORT_IDS
+    group: snort
+    shell: /sbin/nologin
+
+- name: adapt log dir permissions
+  file:
+    path: /var/log/snort
+    owner: snort
+    group: snort
+    mode: '5775' 
+
+- name: "copy snort3 service file {{ role_parrams.tapif }}"
+  template:
+    src: snort3.service.j2
+    dest: /lib/systemd/system/snort3.service
+
+- name: enable snorttap.service
+  service:
+    name: snort3
+    enabled: yes
+    state: started
+    daemon_reload: true
+
+- name: adapt pulledpork3 to tell snort to reload rules file
+  lineinfile:
+    path: /usr/local/etc/pulledpork3/pulledpork.conf
+    regexp: '#pid_path='
+    line: 'pid_path=/var/log/snort/snort.pid'
+    backrefs: yes

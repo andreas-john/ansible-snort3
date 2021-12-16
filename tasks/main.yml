@@ -1,0 +1,35 @@
+---
+# tasks file for ansible-snort3
+
+- import_tasks: 01_prerequisites.yml
+  become: true
+  become_user: root
+
+- import_tasks: 02_build.yml
+  become: true
+  become_user: root
+
+- import_tasks: 03_tapservice.yml
+  become: true
+  become_user: root
+
+- import_tasks: 04_configure.yml
+  become: true
+  become_user: root
+
+- import_tasks: 05_pulledpork3.yml
+  become: true
+  become_user: root
+
+- import_tasks: 06_configpp3.yml
+  become: true
+  become_user: root
+
+- import_tasks: 07_jsonalerts.yml
+  become: true
+  become_user: root
+
+- import_tasks: 08_snortservice.yml
+  become: true
+  become_user: root
+

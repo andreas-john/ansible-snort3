@@ -1,0 +1,81 @@
+- name: pulledpork3, clone repo
+  git:
+    repo: 'https://github.com/shirkdog/pulledpork3.git'
+    dest: ~/snort_src/pulledpork3
+  become: yes
+  become_user: ansible
+
+- name: pulledpork3, create dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/usr/local/bin/pulledpork3"
+    - "/usr/local/etc/pulledpork3"
+
+- name: copy pulledpork.py
+  copy: 
+    remote_src: yes
+    src: /home/ansible/snort_src/pulledpork3/pulledpork.py
+    dest: /usr/local/bin/pulledpork3/pulledpork.py
+    mode: +x 
+    force: no
+
+- name: copy lib dir
+  copy:
+    remote_src: yes
+    src: /home/ansible/snort_src/pulledpork3/lib
+    dest: /usr/local/bin/pulledpork3/
+
+- name: copy pulledpork.conf
+  copy:
+    remote_src: yes
+    src: /home/ansible/snort_src/pulledpork3/etc/pulledpork.conf
+    dest: /usr/local/etc/pulledpork3/pulledpork.conf
+    force: no
+
+- name: set rulesets
+  lineinfile:
+    path: /usr/local/etc/pulledpork3/pulledpork.conf
+    regexp: '{{ item.key}} = '
+    line: '{{ item.key }} = {{ item.value }}'
+  loop: "{{ settings | dict2items }}"
+  vars:
+    settings:
+      community_ruleset: "false"
+      registered_ruleset: "false"
+      LightSPD_ruleset: "true"
+      snort_blocklist: "true"
+      et_blocklist:  "true"
+      oinkcode: "9ad3397ce97fd651bd48732bc15317eabbe3e421"
+      snort_path: "/usr/local/bin/snort"
+      local_rules: "/usr/local/etc/rules/local.rules"
+
+- name: include rules
+  lineinfile:
+    path: /usr/local/etc/snort/snort.lua
+    regexp: '    include = '
+    line: '    include = RULE_PATH .. "/pulledpork.rules",'
+
+- name: "pulledpork3 service"
+  template:
+    src: pulledpork3.service.j2
+    dest: /lib/systemd/system/pulledpork3.service
+
+#- name: enable pulledpork3.service
+#  service:
+#    name: pulledpork3
+    enabled: yes
+
+- name: "pulledpork3.timer service"
+  template:
+    src: pulledpork3.timer.j2
+    dest: /lib/systemd/system/pulledpork3.timer
+
+- name: enable & start pulledpork3.timer
+  service:
+    name: pulledpork3.timer
+    enabled: yes
+    state: started
+    daemon_reload: true
+
