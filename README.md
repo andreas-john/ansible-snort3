@@ -7,8 +7,9 @@ based on https://snort-org-site.s3.amazonaws.com/production/document_files/files
 Requirements
 ------------
 
-currently testet on ubuntu 20.04
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+role itself executed via ansible on ubuntu 20.04
+
+ansible_instsrc
 
 Role Variables
 --------------
