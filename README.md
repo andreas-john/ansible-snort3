@@ -4,6 +4,7 @@ Role Name
 install snort3 on a target ubuntu system.
 
 based on https://snort-org-site.s3.amazonaws.com/production/document_files/files/000/008/108/original/Snort_3_on_Ubuntu_18_and_20.pdf from Noah Dietrich
+
 Requirements
 ------------
 
