@@ -67,4 +67,4 @@ https://github.com/schose/TA-routeros, mikrotik firewall collector
 
 Author Information
 ------------------
-Andreas JOHN, incinerator@gmx.at
+Andreas JOHN, incinerator at gmx.at
